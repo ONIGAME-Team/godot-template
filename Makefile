@@ -1,7 +1,7 @@
 # Makefile
 
 .PHONY: all
-all: prep addons build
+all: prep addons
 
 # BUILD
 
@@ -89,9 +89,12 @@ icon.svg:
 
 .PHONY: clean
 clean:
-	find addons -mindepth 1 -maxdepth 1 ! -name addons.mk -exec rm -rf {} \;
 	rm -rf .godot exports/debug exports/release
 	rm -f icon.svg icon.svg.import
+	@for i in $$(grep -e 'addons/.*:' addons/addons.mk | cut -d ':' -f 1); do \
+		if [[ -d "$$i" ]]; then rm -rf "$$i"; fi; \
+	done
+# find addons -mindepth 1 -maxdepth 1 ! -name addons.mk -exec rm -rf {} \;
 
 # ADDONS
 
